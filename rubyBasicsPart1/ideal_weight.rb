@@ -2,7 +2,6 @@
 
 require 'colorize'
 require 'pry'
-require 'pry-byebug'
 
 # Calculate your ideal weight
 class WeightCalculator

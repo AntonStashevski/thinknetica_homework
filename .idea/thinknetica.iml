@@ -12,11 +12,12 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="bundler (v2.1.4, rbenv: 2.7.0) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="byebug (v11.1.1, rbenv: 2.7.0) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="coderay (v1.1.2, rbenv: 2.7.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="colorize (v0.8.1, rbenv: 2.7.0) [gem]" level="application" />
+<<<<<<< HEAD
     <orderEntry type="library" scope="PROVIDED" name="method_source (v1.0.0, rbenv: 2.7.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="pry (v0.13.1, rbenv: 2.7.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="pry-byebug (v3.8.0, rbenv: 2.7.0) [gem]" level="application" />
+=======
+>>>>>>> 7af8c57... triangle_area
   </component>
 </module>
