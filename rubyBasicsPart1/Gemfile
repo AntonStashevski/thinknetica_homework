@@ -3,11 +3,11 @@
 ruby '2.3.8'
 
 gem 'colorize'
-gem 'pry'
-gem 'pry-byebug'
+gem 'pry', '~>0.10.4'
+gem 'pry-byebug', '~>3.4.2'
 
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 # gem "rails"

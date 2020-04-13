@@ -2,7 +2,6 @@
 
 require 'colorize'
 require 'pry'
-require 'pry-byebug'
 
 # Calculate your ideal weight
 class WeightCalculator
@@ -15,7 +14,7 @@ class WeightCalculator
 
   def calculate_weight
     ideal_height = (@height - 110) * 1.15
-    ideal_height.positive? "Your ideal weight: #{ideal_height}" ? "Your weight is already optimal!!!"
+    ideal_height.positive? "Your ideal weight: #{ideal_height}" : "Your weight is already optimal!!!"
   end
 
   def chomp_information(request_string, validator)
