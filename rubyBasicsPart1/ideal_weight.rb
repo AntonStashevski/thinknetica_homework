@@ -13,8 +13,13 @@ class WeightCalculator
   end
 
   def calculate_weight
-    ideal_height = (@height - 110) * 1.15
-    ideal_height.positive? "Your ideal weight: #{ideal_height}" : "Your weight is already optimal!!!"
+    binding.pry
+    ideal_height = (@height.to_i - 110) * 1.15
+    if ideal_height.positive?
+      puts "Your ideal weight: #{ideal_height.round 3}"
+    else
+      puts "Your weight is already optimal!!!"
+    end
   end
 
   def chomp_information(request_string, validator)
@@ -37,7 +42,7 @@ class WeightCalculator
   end
 
   def height_validate(height)
-    unless height[/[0-9]+/] == height
+    unless height.scan(/\D/).empty?
       puts 'height must be in numbers, try again!!!'.red
       return false
     end
