@@ -25,11 +25,13 @@ class TriangleArea
   end
 
   def triangle_type(sides)
-    biggest_side = sides.delete_at(sides.index(sides.max))
-    side1 = sides.first
-    side2 = sides.last
-    puts 'This triangle is rectangular!!!' if side1**2 + side2**2 == biggest_side**2
-    puts 'This triangle is isosceles!!!' if side1 == side2 || side1 == biggest_side || side2 == biggest_side
+    side1, side2, biggest_side = sides.sort
+    if side1**2 + side2**2 == biggest_side**2
+      puts 'This triangle is rectangular!!!'
+    end
+    if side1 == side2 || side1 == biggest_side || side2 == biggest_side
+      puts 'This triangle is isosceles!!!'
+    end
     return unless side1 == side2 && side2 == biggest_side
 
     puts 'This triangle is equilateral!!!'

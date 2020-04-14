@@ -7,11 +7,6 @@ require 'pry'
 class WeightCalculator
   attr_accessor :name, :height
 
-  def initialize
-    @name = name
-    @height = height
-  end
-
   def calculate_weight
     ideal_height = (@height.to_i - 110) * 1.15
     if ideal_height.positive?

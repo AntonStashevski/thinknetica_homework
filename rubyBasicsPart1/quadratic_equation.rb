@@ -25,10 +25,12 @@ class TriangleArea
   end
 
   def calculate_roots(roots)
-    a_root, b_root, c_root = roots[0], roots[1], roots[2]
+    a_root = roots[0]
+    b_root = roots[1]
+    c_root = roots[2]
     puts "Your equation looks like: #{a_root}x^² + #{b_root}x + #{c_root} = 0"
     discriminant = discriminant_calculate(a_root, b_root, c_root)
-    roots_calculate(a_root, b_root, c_root, discriminant)
+    roots_calculate(a_root, b_root, discriminant)
   end
 
   def discriminant_calculate(a_root, b_root, c_root)
@@ -41,10 +43,11 @@ class TriangleArea
     discriminant
   end
 
-  def roots_calculate(a_root, b_root, c_root, discriminant)
+  def roots_calculate(a_root, b_root, discriminant)
+    discriminant_sqrt = Math.sqrt(discriminant)
     if discriminant > 0
-      x1 = (-b_root + Math.sqrt(discriminant))/ 2.0 * a_root
-      x2 = (-b_root - Math.sqrt(discriminant))/ 2.0 * a_root
+      x1 = (-b_root + discriminant_sqrt) / 2.0 * a_root
+      x2 = (-b_root - discriminant_sqrt) / 2.0 * a_root
     elsif discriminant == 0
       x1 = x2 = -b_root / (2.0 * a_root)
     end

@@ -8,11 +8,6 @@ require 'pry-byebug'
 class TriangleArea
   attr_accessor :base, :height
 
-  def initialize
-    @base = base
-    @height = height
-  end
-
   def calculate_area
     puts "Triangle Area: #{(0.5 * @base * @height)}"
   end
