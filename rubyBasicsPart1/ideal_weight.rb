@@ -13,18 +13,17 @@ class WeightCalculator
   end
 
   def calculate_weight
-    binding.pry
     ideal_height = (@height.to_i - 110) * 1.15
     if ideal_height.positive?
       puts "Your ideal weight: #{ideal_height.round 3}"
     else
-      puts "Your weight is already optimal!!!"
+      puts 'Your weight is already optimal!!!'
     end
   end
 
   def chomp_information(request_string, validator)
     puts request_string
-    while true
+    loop do
       info = gets.chomp
       valid = validator == 'name' ? name_validate(info) : height_validate(info)
       return info if valid
