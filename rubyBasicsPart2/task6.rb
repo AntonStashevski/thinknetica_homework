@@ -17,7 +17,7 @@ end
 
 def sum_calculator(information)
   full_price = 0
-  information.map do |product|
+  information.each do |product|
     price_count_arr = product.last.values.map(&:to_i)
     total_price = price_count_arr.first * price_count_arr.last
     full_price += total_price
