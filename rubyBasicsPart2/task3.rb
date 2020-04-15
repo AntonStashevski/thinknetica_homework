@@ -10,10 +10,13 @@ def fib(num)
 end
 
 array = []
-(0..100).map do |number|
-  break if fib(number) > 100
+number = 0
+loop do
+  fib_number = fib(number)
+  break if fib_number > 100
 
-  array << fib(number)
+  array << fib_number
+  number += 1
 end
 
 puts "Fibonacci array : #{array.uniq!}"

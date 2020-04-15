@@ -9,3 +9,5 @@ hash = {}
 alphabet.each_with_index do |letter, index|
   hash[letter] = index if vowels.include? letter
 end
+
+puts hash
