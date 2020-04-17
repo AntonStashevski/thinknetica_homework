@@ -16,11 +16,10 @@ class Station
   end
 
   def cargo_passenger_list
-    cargo = 0
-    passenger = 0
-    @trains.each { |train| train.type == 'cargo' ? cargo += 1 : passenger += 1 }
-    puts "cargo: #{cargo}, passenger: #{passenger}."
-    [cargo, passenger]
+    cargo_count = @trains.count(&:cargo?)
+    passenger_count = @trains.count(&:passenger?)
+    puts "cargo: #{cargo_count}, passenger: #{passenger_count}."
+    [cargo_count, passenger_count]
   end
 
   def send_train(train)
@@ -74,6 +73,14 @@ class Train
 
   def current_speed
     @speed
+  end
+
+  def cargo?
+    type == 'cargo'
+  end
+
+  def passenger?
+    type == 'passenger'
   end
 
   def stop
