@@ -2,28 +2,29 @@
 
 # Station class can take, send and display all trains.
 class Station
-  attr_accessor :trains_on_station, :station_name
+  attr_accessor :trains
+  attr_reader :name
 
-  def initialize(station_name)
-    @station_name = station_name
-    @trains_on_station = []
+  def initialize(name)
+    @name = name
+    @trains = []
   end
 
   def take_train(train)
-    @trains_on_station << train
-    puts "Train number:#{train.number} arrived on #{station_name} station."
+    @trains << train
+    puts "Train number:#{train.number} arrived on #{name} station."
   end
 
   def cargo_passenger_list
     cargo = 0
     passenger = 0
-    @trains_on_station.each { |train| train.type == 'cargo' ? cargo += 1 : passenger += 1 }
+    @trains.each { |train| train.type == 'cargo' ? cargo += 1 : passenger += 1 }
     puts "cargo: #{cargo}, passenger: #{passenger}."
     [cargo, passenger]
   end
 
   def send_train(train)
-    @trains_on_station.delete(train)
+    @trains.delete(train)
     puts "Bye-bye train number:#{train.number}."
   end
 end
@@ -31,7 +32,8 @@ end
 # Route class contains start station, end station and way station's list,
 # can add, delete way station's and display all stations from start to last.
 class Route
-  attr_accessor :start_station, :end_station, :way_stations
+  attr_accessor :way_stations
+  attr_reader :start_station, :end_station
   def initialize(start_station, end_station)
     @start_station = start_station
     @end_station = end_station
@@ -40,24 +42,25 @@ class Route
 
   def add_way_station(station)
     @way_stations.insert(-2, station)
-    puts "Add station #{station.station_name} to route."
+    puts "Add station #{station.name} to route."
   end
 
   def delete_way_station(station)
     @way_stations.delete(station)
-    puts "Delete station #{station.station_name} to route."
+    puts "Delete station #{station.name} to route."
   end
 
   def display_stations
-    @way_stations.each { |station| puts station.station_name }
+    @way_stations.select { |station| puts station.name }
   end
 end
 
 # Train class have random number, type(0 = cargo orr any symbol = passenger), carriages_count,
 # you can raise speed, return current speed and carriages count, stop your train, hook or unhook
-# carriage, take_route, drive_back or driveto next station,
+# carriage, take_route, drive_back or drive to next station,
 class Train
-  attr_accessor :number, :type, :speed, :carriages_count, :station, :route
+  attr_reader :number, :type
+  attr_accessor :carriages_count
   def initialize(type, carriages_count)
     @number = (0...10).map { ('a'..'z').to_a[rand(9)] }.join
     @type = type.zero? ? 'cargo' : 'passenger'
@@ -113,56 +116,24 @@ class Train
 
   def next_station
     if @route.way_stations.size == @route.way_stations.index(@station) + 1
-      return "#{@station.station_name} last station"
+      return "#{@station.name} last station"
     end
 
     step = @route.way_stations.index(@station)
     puts step
-    @route.way_stations[step + 1].station_name
+    @route.way_stations[step + 1].name
   end
 
   def previous_station
     if @route.way_stations.index(@station).zero?
-      return "#{@station.station_name} last station"
+      return "#{@station.name} last station"
     end
 
     step = @route.way_stations.index(@station)
-    @route.way_stations[step - 1].station_name
+    @route.way_stations[step - 1].name
   end
 
   def current_station
-    @station.station_name
+    @station.name
   end
 end
-
-# moscow = Station.new('Moscow')
-# gomel = Station.new('Gomel')
-# borisov = Station.new('Borisov')
-# lida = Station.new('Lida')
-# minsk = Station.new('Minsk')
-# minsk_moscow = Route.new(minsk, moscow)
-# gomel_lida = Route.new(gomel, lida)
-# train = Train.new(1, 6)
-# train2 = Train.new(1, 7)
-# train3 = Train.new(0, 5)
-# train4 = Train.new(0, 4)
-# train.take_route(minsk_moscow)
-# train2.take_route(minsk_moscow)
-# train3.take_route(minsk_moscow)
-# train4.take_route(gomel_lida)
-# minsk.cargo_passenger_list
-# gomel.cargo_passenger_list
-# minsk_moscow.add_way_station(gomel)
-# minsk_moscow.add_way_station(borisov)
-# minsk_moscow.display_stations
-# train.drive_next
-# train.drive_next
-# train.drive_next
-# train.drive_next
-# train.next_station
-# train.drive_back
-# train.drive_back
-# train.drive_back
-# train.drive_back
-# train.drive_back
-# train.previous_station
