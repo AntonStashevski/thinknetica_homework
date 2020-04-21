@@ -75,7 +75,7 @@ module Validate
   end
 
   module NumberValidate
-    NUMBER_FORMAT = /^\S{3}-*\S{2}$/.freeze
+    NUMBER_FORMAT = /^[a-zа-я0-9]{3}-?[a-zа-я0-9]{2}$/.freeze
 
     def validate_train_carriage_object_number!(attempt = 0)
       raise 'Значение number должно быть строкой' unless number.is_a? String
