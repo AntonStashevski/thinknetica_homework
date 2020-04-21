@@ -1,6 +1,5 @@
-# frozen_string_literal: true
-
-# rubocop:disable Layout/LineLength, Metrics/MethodLength
+s # frozen_string_literal: true
+# rubocop:disable all
 
 require 'pry'
 require_relative 'manufacturer'
@@ -33,7 +32,7 @@ class Menu
       choice = select_information
       case choice
       when 1
-        create_station
+        station_control
       when 2
         create_train
       when 3
@@ -51,7 +50,51 @@ class Menu
       when 9
         create_carriage
       when 10
+        station = Station.new('йййййййййй')
+        station2 = Station.new('цццццццццц')
+
+        route = Route.new(station, station2)
+
+        train = TrainPassenger.new('12345')
+        train2 = TrainCargo.new('54321')
+
+        train.take_route(route)
+        train2.take_route(route)
+
         binding.pry
+        carriage_1 = CarriagePassenger.new('11111', 111)
+        carriage_2 = CarriagePassenger.new('22222', 222)
+        carriage_3 = CarriagePassenger.new('33333', 333)
+        carriage_4 = CarriageCargo.new('44444', 444)
+        carriage_5 = CarriageCargo.new('55555', 555)
+        carriage_6 = CarriageCargo.new('66666', 666)
+
+        train.hook_carriage(carriage_1)
+        train.hook_carriage(carriage_2)
+        train.hook_carriage(carriage_3)
+        train2.hook_carriage(carriage_4)
+        train2.hook_carriage(carriage_5)
+        train2.hook_carriage(carriage_6)
+
+        station.each_train do |train|
+          puts "Номер поезда: #{train.number}, тип: #{train.type}, кол-во вагонов: #{train.carriages.size}"
+        end
+
+        train.each_carriage do |carriage|
+          if carriage.cargo?
+            puts "Номер вагона: #{carriage.number}, тип: #{carriage.type}, занятый объем: #{carriage.occupied_volume}, cвободный объем: #{carriage.free_volume}"
+          else
+            puts "Номер вагона: #{carriage.number}, тип: #{carriage.type}, занято мест: #{carriage.occupied_volume}, cвободно мест: #{carriage.free_volume}"
+          end
+        end
+
+        train2.each_carriage do |carriage|
+          if carriage.cargo?
+            puts "Номер вагона: #{carriage.number}, тип: #{carriage.type}, занятый объем: #{carriage.occupied_volume}, cвободный объем: #{carriage.free_volume}"
+          else
+            puts "Номер вагона: #{carriage.number}, тип: #{carriage.type}, занято мест: #{carriage.occupied_volume}, cвободно мест: #{carriage.free_volume}"
+          end
+        end
       else
         exit
       end
@@ -59,6 +102,22 @@ class Menu
   end
 
   private
+
+  def station_control
+    station_control_menu
+    choice = select_information
+    case choice
+    when 1
+      name = select_information(nil, 'station') { 'Введите название станции' }
+      @stations << Station.new(name)
+      puts "Станция #{@stations.last.name} создана"
+    when 2
+      station = select_information(print_all_stations) { 'Выберите станцию' }
+      @stations[station].each_train do |train|
+        puts "Номер поезда: #{train.number}, тип: #{train.type}, кол-во вагонов: #{train.carriages.size}"
+      end
+    end
+  end
 
   def train_list_at_the_station
     train_list_at_the_station_menu
@@ -69,7 +128,7 @@ class Menu
     when 2
       station = select_information(print_all_stations) { 'Выберите станцию' }
       station_name = @stations[station].name
-      trains = @stations[station].trains_on_station
+      trains = @stations[station].trains_on_station.map(&:number).join(', ')
       if trains.empty?
         puts "На станции: #{station_name} нет поездов"
       else
@@ -90,16 +149,16 @@ class Menu
     when 1
       next_station_name = @trains[train].next_station
       if @trains[train].drive_next.nil?
-        p "Поезд: #{train_number} находится на конечной станции"
+        puts "Поезд: #{train_number} находится на конечной станции"
       else
-        p "Поезд: #{train_number} отпраялется со станции #{current_station_name} на станцию #{next_station_name}."
+        puts "Поезд: #{train_number} отпраялется со станции #{current_station_name} на станцию #{next_station_name}."
       end
     when 2
       previous_station_name = @trains[train].previous_station
       if @trains[train].drive_back.nil?
-        p "Поезд: #{train_number} находится на начальной станции"
+        puts "Поезд: #{train_number} находится на начальной станции"
       else
-        p "Поезд: #{train_number} отпраялется со станции #{current_station_name} на станцию #{previous_station_name}."
+        puts "Поезд: #{train_number} отпраялется со станции #{current_station_name} на станцию #{previous_station_name}."
       end
     else
       exit
@@ -130,29 +189,55 @@ class Menu
   def create_carriage
     carriage_menu
     choice = select_information
-    carriage_number = select_information(nil, 'carriage') { 'Введите номер вагона' }
     case choice
-    when 1
-      @carriages << CarriageCargo.new(carriage_number)
-      puts "Грузовой вагон под номером: #{@carriages.last.number} создан"
-    when 2
-      @carriages << CarriagePassenger.new(carriage_number)
-      puts "Пассажирский вагон под номером: #{@carriages.last.number} создан"
+    when (1..2)
+      carriage_number = select_information(nil, 'carriage') { 'Введите номер вагона' }
+      volume = select_information(nil, 'volume') { 'Введите кол-во мест/объем вагона' }
+      if choice == 1
+        @carriages << CarriageCargo.new(carriage_number, volume)
+        puts "Грузовой вагон под номером: #{@carriages.last.number} c объемом #{volume} создан"
+      elsif choice == 2
+        @carriages << CarriagePassenger.new(carriage_number, volume)
+        puts "Пассажирский вагон под номером: #{@carriages.last.number} c #{volume} местами создан"
+      end
+    when (3..6)
+      carriage_information(choice)
     else
       exit
     end
   end
 
-  def create_station
-    name = select_information(nil, 'train') { 'Введите название станции' }
-    @stations << Station.new(name)
-    puts "Станция #{@stations.last.name} создана"
+  def carriage_information(choice)
+    carriage_num = select_information(print_all_carriages) { 'Выберите вагон' }
+    carriage = @carriages[carriage_num]
+    if choice == 3
+      puts "Кол-во мест/объема: #{carriage.volume}"
+    elsif choice == 4
+      if carriage.cargo?
+        volume = select_information(nil, 'volume') { 'Введите объем который вы хотите занять' }
+        if carriage.take_volume(volume)
+          puts("Вагон: #{carriage.number} наполнился на #{volume}")
+        else
+          puts("Вагон: #{carriage.number} не может наполнится на такой объем!")
+        end
+      elsif carriage.passenger?
+        if carriage.take_volume
+          puts("В вагонe: #{carriage.number} сел пасажир")
+        else
+          puts("Вагон: #{carriage.number} уже забит!")
+        end
+      end
+    elsif choice == 5
+      puts "В вагонe: #{carriage.number} занято #{carriage.occupied_volume} мест/объема"
+    elsif choice == 6
+      puts "В вагонe: #{carriage.number} свободно #{carriage.free_volume} мест/объема"
+    end
   end
 
   def create_train
     create_train_menu
     choice = select_information
-    train_number = select_information(nil, 'station') { 'Введите номер поезда' }
+    train_number = select_information(nil, 'train') { 'Введите номер поезда' }
     case choice
     when 1
       @trains << TrainPassenger.new(train_number)
@@ -160,6 +245,15 @@ class Menu
     when 2
       @trains << TrainCargo.new(train_number)
       puts "Грузовой поезд номер #{@trains.last.number} создан"
+    when 3
+      train = select_information(print_all_trains) { 'Выберите поезд' }
+      @trains[train].each_carriage do |carriage|
+        if carriage.cargo?
+          puts "Номер вагона: #{carriage.number}, тип: #{carriage.type}, занятый объем: #{carriage.occupied_volume}, cвободный объем: #{carriage.free_volume}"
+        else
+          puts "Номер вагона: #{carriage.number}, тип: #{carriage.type}, занято мест: #{carriage.occupied_volume}, cвободно мест: #{carriage.free_volume}"
+        end
+      end
     else
       exit
     end
@@ -220,15 +314,18 @@ class Menu
     @stations.map(&:name).each_with_index { |name, index| p "#{index} - #{name}" }
   end
 
-  def select_information(_info = nil, type = 'number')
+  def select_information(info = nil, type = 'number')
+    info
     puts yield if block_given?
     information = gets.chomp
     if type == 'number'
-      validate_choice!(information).to_i
+      validate!(information, 'number', 'choise', 1, 2)
     elsif type == 'station'
-      validate_station_name!(information)
+      validate!(information, 'text', 'station_name', 5, 'Минск(русские буквы и дефисы)')
     elsif type == 'carriage' || type == 'train'
-      validate_train_carriage_number!(information)
+      validate!(information, 'text', 'train_carriage_number', 5, '(123-22)')
+    elsif type == 'volume'
+      validate!(information, 'number', 'carriage_volume', -3, 24)
     end
   end
 
@@ -252,13 +349,25 @@ class Menu
     puts '________________________________________________________________'
     puts '| 1 - Создать грузовой вагон                                   |'
     puts '| 2 - Создать пассажирский вагон                               |'
+    puts '| 3 - Кол-во мест/объема у вагона                              |'
+    puts '| 4 - Занять место/объем у вагона                              |'
+    puts '| 5 - Кол-во занятых мест/объема у вагона                      |'
+    puts '| 6 - Кол-во свободных мест/объема у вагона                    |'
+    puts '| 0 - Выход                                                    |'
+    puts '________________________________________________________________'
+  end
+
+  def station_control_menu
+    puts '________________________________________________________________'
+    puts '| 1 - Создать станцию                                          |'
+    puts '| 2 - Вывести список всех поездов на станции                   |'
     puts '| 0 - Выход                                                    |'
     puts '________________________________________________________________'
   end
 
   def main_menu
     puts '________________________________________________________________'
-    puts '| 1 -  Создать станцию                                         |'
+    puts '| 1 -  Управление станциями                                    |'
     puts '| 2 -  Создать поезд                                           |'
     puts '| 3 -  Создать маршрут и упралять станциями в нем              |'
     puts '| 4 -  Назначить маршрут поезду                                |'
@@ -266,7 +375,7 @@ class Menu
     puts '| 6 -  Отцепить вагон от поезда                                |'
     puts '| 7 -  Перемещать поезд по маршруту вперед назад               |'
     puts '| 8 -  Просмотреть список поездов или список поездов на станции|'
-    puts '| 9 -  Создать вагон                                           |'
+    puts '| 9 -  Управление вагонами                                     |'
     puts '| 0 - Выход                                                    |'
     puts '________________________________________________________________'
   end
@@ -283,6 +392,8 @@ class Menu
   def create_train_menu
     puts '________________________________________________________________'
     puts '| 1 - Создать пассажирский поезд                               |'
+    puts '| 2 - Создать грузовой поезд                                   |'
+    puts '| 3 - Вывести список всех  вагонов у поезда                    |'
     puts '| 2 - Создать грузовой поезд                                   |'
     puts '| 0 - Выход                                                    |'
     puts '________________________________________________________________'

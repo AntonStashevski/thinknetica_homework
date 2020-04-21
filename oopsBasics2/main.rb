@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# rubocop:disable LineLength, MethodLength
+# rubocop:disable Layout/LineLength, Metrics/MethodLength
 
 require 'pry'
 require_relative 'route'
@@ -61,8 +61,6 @@ class Menu
     when 2
       station = select_information(print_all_stations) { 'Выберите станцию' }
       @stations[station].trains_on_station
-    else
-      return
     end
   end
 
@@ -75,8 +73,6 @@ class Menu
       p @trains[train].drive_next
     when 2
       p @trains[train].drive_back
-    else
-      return
     end
   end
 
@@ -100,8 +96,6 @@ class Menu
     when 2
       @carriages << CarriagePassenger.new
       puts "Пассажирский вагон под номером: #{@carriages.last.number} создан"
-    else
-      return
     end
   end
 
@@ -121,8 +115,6 @@ class Menu
     when 2
       @trains << TrainCargo.new
       puts "Грузовой поезд номер #{@trains.last.number} создан"
-    else
-      return
     end
   end
 
@@ -138,8 +130,6 @@ class Menu
       edit_route_stations(0) { 'Выберите станцию которую хотите добавить в путь' }
     when 3
       edit_route_stations(1) { 'Выберите станцию которую хотите удалить' }
-    else
-      return
     end
   end
 

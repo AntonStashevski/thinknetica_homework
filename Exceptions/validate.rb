@@ -11,9 +11,13 @@ module Validate
     CHOICE_FORMAT = /^[0-9]{1,2}$/.freeze
 
     def validate_choice!(attempt = 0, information)
-      raise 'Значение choice должно быть строкой' unless information.is_a? String
+      unless information.is_a? String
+        raise 'Значение choice должно быть строкой'
+      end
       raise 'Choice не может быть пустым' if information.empty?
-      raise 'Choice имеет непраильный формат (только цифры)' if information !~ CHOICE_FORMAT
+      if information !~ CHOICE_FORMAT
+        raise 'Choice имеет непраильный формат (только цифры)'
+      end
 
       information
     rescue StandardError => e
@@ -35,7 +39,9 @@ module Validate
     def validate_station_object!(attempt = 0)
       raise 'Значение name должно быть строкой' unless name.is_a? String
       raise 'Длинна названия станции должна быть больше 3' if name.length < 3
-      raise 'Станция имеет не правильный формат (только русские буквы и дефис)' if name !~ STATION_FORMAT
+      if name !~ STATION_FORMAT
+        raise 'Станция имеет не правильный формат (только русские буквы и дефис)'
+      end
     rescue StandardError => e
       if attempt < 3
         puts "#{e.message} \nОсталось #{3 - attempt} попыток"
@@ -57,8 +63,12 @@ module Validate
 
     def validate_station_name!(attempt = 0, information)
       raise 'Значение name должно быть строкой' unless information.is_a? String
-      raise 'Длинна названия станции должна быть больше 3' if information.length < 3
-      raise 'Станция имеет не правильный формат (только русские буквы и дефис)' if information !~ STATION_FORMAT
+      if information.length < 3
+        raise 'Длинна названия станции должна быть больше 3'
+      end
+      if information !~ STATION_FORMAT
+        raise 'Станция имеет не правильный формат (только русские буквы и дефис)'
+      end
 
       information
     rescue StandardError => e
@@ -80,7 +90,9 @@ module Validate
     def validate_train_carriage_object_number!(attempt = 0)
       raise 'Значение number должно быть строкой' unless number.is_a? String
       raise 'Длинна номера должна быть равна 5 символам' if number.length < 5
-      raise 'Номер имеет неправильный формат должно быть например (123-22)' if number !~ NUMBER_FORMAT
+      if number !~ NUMBER_FORMAT
+        raise 'Номер имеет неправильный формат должно быть например (123-22)'
+      end
     rescue StandardError => e
       if attempt < 3
         puts "#{e.message} \nОсталось #{3 - attempt} попыток"
@@ -101,9 +113,15 @@ module Validate
     end
 
     def validate_train_carriage_number!(attempt = 0, information)
-      raise 'Значение number должно быть строкой' unless information.is_a? String
-      raise 'Длинна номера должна быть равна 5 символам' if information.length < 5
-      raise 'Номер имеет неправильный формат должно быть например (123-22)' if information !~ NUMBER_FORMAT
+      unless information.is_a? String
+        raise 'Значение number должно быть строкой'
+      end
+      if information.length < 5
+        raise 'Длинна номера должна быть равна 5 символам'
+      end
+      if information !~ NUMBER_FORMAT
+        raise 'Номер имеет неправильный формат должно быть например (123-22)'
+      end
 
       information
     rescue StandardError => e
