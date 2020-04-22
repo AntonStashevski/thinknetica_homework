@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Style/ClassVars
-
 require_relative 'instance_counter'
 require_relative 'validate'
 
@@ -52,5 +50,3 @@ class Station
 
   attr_accessor :trains
 end
-
-# rubocop:enable Style/ClassVars

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/LineLength
-
 require 'pry'
 require_relative 'manufacturer'
 require_relative 'route'
@@ -356,5 +354,3 @@ end
 
 menu = Menu.new
 menu.chomp_information
-
-# rubocop:enable Metrics/LineLength

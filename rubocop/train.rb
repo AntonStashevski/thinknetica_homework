@@ -85,9 +85,7 @@ class Train
   end
 
   def next_station
-    if @route.way_stations.size == @route.way_stations.index(@station) + 1
-      return nil
-    end
+    return nil if @route.way_stations.size == @route.way_stations.index(@station) + 1
 
     step = @route.way_stations.index(@station)
     @route.way_stations[step + 1].name
