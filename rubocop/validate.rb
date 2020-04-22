@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/LineLength
 # Validate
 module Validate
   TRY_COUNT = 3
@@ -42,5 +41,3 @@ module Validate
     retry
   end
 end
-
-# rubocop:enable Metrics/LineLength
