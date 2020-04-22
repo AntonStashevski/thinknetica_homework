@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-# rubocop:disable all
+
+# rubocop:disable Metrics/LineLength
 
 require 'pry'
 require_relative 'manufacturer'
@@ -28,8 +29,7 @@ class Menu
 
   def chomp_information
     loop do
-      main_menu
-      choice = select_information
+      choice = select_information(main_menu)
       case choice
       when 1
         station_control
@@ -49,52 +49,6 @@ class Menu
         train_list_at_the_station
       when 9
         create_carriage
-      when 10
-        station = Station.new('йййййййййй')
-        station2 = Station.new('цццццццццц')
-
-        route = Route.new(station, station2)
-
-        train = TrainPassenger.new('12345')
-        train2 = TrainCargo.new('54321')
-
-        train.take_route(route)
-        train2.take_route(route)
-
-        binding.pry
-        carriage_1 = CarriagePassenger.new('11111', 111)
-        carriage_2 = CarriagePassenger.new('22222', 222)
-        carriage_3 = CarriagePassenger.new('33333', 333)
-        carriage_4 = CarriageCargo.new('44444', 444)
-        carriage_5 = CarriageCargo.new('55555', 555)
-        carriage_6 = CarriageCargo.new('66666', 666)
-
-        train.hook_carriage(carriage_1)
-        train.hook_carriage(carriage_2)
-        train.hook_carriage(carriage_3)
-        train2.hook_carriage(carriage_4)
-        train2.hook_carriage(carriage_5)
-        train2.hook_carriage(carriage_6)
-
-        station.each_train do |train|
-          puts "Номер поезда: #{train.number}, тип: #{train.type}, кол-во вагонов: #{train.carriages.size}"
-        end
-
-        train.each_carriage do |carriage|
-          if carriage.cargo?
-            puts "Номер вагона: #{carriage.number}, тип: #{carriage.type}, занятый объем: #{carriage.occupied_volume}, cвободный объем: #{carriage.free_volume}"
-          else
-            puts "Номер вагона: #{carriage.number}, тип: #{carriage.type}, занято мест: #{carriage.occupied_volume}, cвободно мест: #{carriage.free_volume}"
-          end
-        end
-
-        train2.each_carriage do |carriage|
-          if carriage.cargo?
-            puts "Номер вагона: #{carriage.number}, тип: #{carriage.type}, занятый объем: #{carriage.occupied_volume}, cвободный объем: #{carriage.free_volume}"
-          else
-            puts "Номер вагона: #{carriage.number}, тип: #{carriage.type}, занято мест: #{carriage.occupied_volume}, cвободно мест: #{carriage.free_volume}"
-          end
-        end
       else
         exit
       end
@@ -264,9 +218,9 @@ class Menu
     choice = select_information
     case choice
     when 1
-      station_1 = select_information(print_all_stations) { 'Выберите начальную станцию' }
-      station_2 = select_information { 'Выберите конечную станцию' }
-      @routes << Route.new(@stations[station_1], @stations[station_2])
+      station1 = select_information(print_all_stations) { 'Выберите начальную станцию' }
+      station2 = select_information { 'Выберите конечную станцию' }
+      @routes << Route.new(@stations[station1], @stations[station2])
       puts "Маршрут #{@routes.last.name} успешно создан"
     when 2
       edit_route_stations(0) { 'Выберите станцию которую хотите добавить в путь' }
@@ -314,18 +268,18 @@ class Menu
     @stations.map(&:name).each_with_index { |name, index| p "#{index} - #{name}" }
   end
 
-  def select_information(info = nil, type = 'number')
-    info
+  def select_information(_info = nil, type = 'number')
     puts yield if block_given?
     information = gets.chomp
     if type == 'number'
-      validate!(information, 'number', 'choise', 1, 2)
+      # info, type, name, length, example = hash[:info], hash[:type], hash[:name], hash[:length], hash[:example]
+      validate!(info: information, type: 'number', name: :choice, length: 1, example: 2)
     elsif type == 'station'
-      validate!(information, 'text', 'station_name', 5, 'Минск(русские буквы и дефисы)')
-    elsif type == 'carriage' || type == 'train'
-      validate!(information, 'text', 'train_carriage_number', 5, '(123-22)')
+      validate!(info: information, type: 'text', name: :station_name, length: 5, example: 'Минск(русские буквы и дефисы)')
+    elsif type.include? %w[carriage train]
+      validate!(info: information, type: 'text', name: :train_carriage_number, length: 5, example: '(123-22)')
     elsif type == 'volume'
-      validate!(information, 'number', 'carriage_volume', -3, 24)
+      validate!(info: information, type: 'number', name: :carriage_volume, length: -3, example: 24)
     end
   end
 
@@ -402,3 +356,5 @@ end
 
 menu = Menu.new
 menu.chomp_information
+
+# rubocop:enable Metrics/LineLength
